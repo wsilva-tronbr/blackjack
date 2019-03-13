@@ -1,1 +1,3 @@
 # blackjack
+
+Treinamento de Python
