@@ -33,7 +33,6 @@ baralho.embaralhar()
 jogador = Jogador()
 while True:
     aposta = iniciaJogada()
-
     maisCarta = "s"
     status = ""
     while maisCarta.upper() == "S":
