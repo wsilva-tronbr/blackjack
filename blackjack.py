@@ -1,5 +1,6 @@
 # blackjack.py
 
+
 import random
 from baralho import Baralho
 from jogador import Jogador
