@@ -12,6 +12,10 @@ class Jogador(object):
     def getJogo(self):
         return self.jogo
 
+    def reseta(self):
+        self.jogo=[]
+        self.pontos = 0
+
     def setCarta(self, carta, indice):
         self.jogo.append(carta)
         self.pontos += indice
