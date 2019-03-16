@@ -10,15 +10,14 @@ def tela(jogador):
     font = pygame.font.SysFont(None, 18)
     text = font.render("Valor da aposta: R$15,00. Você tem: R$"+str(jogador.getDinheiro())+",00", True, (0, 0, 0))
     screen.blit(text, [5, 5])
+    text = font.render("Pontos: "+str(jogador.getPontos()), True, (0, 0, 0))
+    screen.blit(text, [5, 550])
+    text = font.render("Outra carta (S/N)?", True, (0, 0, 0))
+    screen.blit(text, [200, 550])
     linha = 20
     for i in jogador.getJogo():
         screen.blit(pygame.image.load(i), (linha, 20))
         linha += 80
-    font = pygame.font.SysFont(None, 18)
-    text = font.render("Pontos: "+str(jogador.getPontos()), True, (0, 0, 0))
-    screen.blit(text, [5, 550])
-    text = font.render("Outra cartas (S/N)?", True, (0, 0, 0))
-    screen.blit(text, [200, 550])
     pygame.display.update()
 
 def pegaCartas(jogador, quantidade):
@@ -26,15 +25,21 @@ def pegaCartas(jogador, quantidade):
         carta = baralho.getCarta()
         jogador.setCarta(carta,baralho.cartas[carta])
 
+def gameOver(mensagem,mult):
+    font = pygame.font.SysFont(None, 18)
+    text = font.render(mensagem, True, (0, 0, 0))
+    screen.blit(text, [200, 500])
+    pygame.display.update()
+    jogador.resultado(aposta*mult)
 
+pygame.init()
+pygame.display.set_caption("Black Jack")
+screen = pygame.display.set_mode((700, 600))
 baralho = Baralho()
-baralho.embaralhar()
 jogador = Jogador()
 aposta = 15
 while True:
-    pygame.init()
-    pygame.display.set_caption("Black Jack")
-    screen = pygame.display.set_mode((700, 600))
+    baralho.embaralhar()
     jogador.reseta()
     pegaCartas(jogador, 2)
     tela(jogador)
@@ -54,21 +59,15 @@ while True:
                 tela(jogador)
 
                 if jogador.getPontos() == 21:
-                    font = pygame.font.SysFont(None, 18)
-                    text = font.render("BLACK JACK!!!", True, (0, 0, 0))
-                    screen.blit(text, [200, 500])
-                    pygame.display.update()
-                    jogador.adicionaDinheiro(aposta)
                     status = "ganhou"
+                    gameOver("Black Jack",1)
                     run = False
+
                 elif jogador.getPontos() > 21:
-                    font = pygame.font.SysFont(None, 18)
-                    text = font.render("ESTOUROU!!!", True, (0, 0, 0))
-                    screen.blit(text, [200, 500])
-                    pygame.display.update()
-                    jogador.subtraiDinheiro(aposta)
                     status = "perdeu"
+                    gameOver("ESTOUROU!!!",-1)
                     run = False
+
             elif keys[pygame.K_n]:
                 run = False
 
@@ -78,30 +77,19 @@ while True:
         font = pygame.font.SysFont(None, 18)
         text = font.render("Banca jogando... fez " + str(pontosBanca), True, (0, 0, 0))
         screen.blit(text, [200, 400])
-        # pygame.display.update()
         if jogador.pontos > pontosBanca or pontosBanca > 21:
-            font = pygame.font.SysFont(None, 18)
-            text = font.render('Você Ganhou!', True, (0, 0, 0))
-            screen.blit(text, [200, 500])
-            # pygame.display.update()
-            jogador.adicionaDinheiro(aposta)
+            gameOver("Você Ganhou!",1)
         else:
-            font = pygame.font.SysFont(None, 18)
-            text = font.render('Você Perdeu!', True, (0, 0, 0))
-            screen.blit(text, [200, 500])
-            # pygame.display.update()
-            jogador.subtraiDinheiro(aposta)
-        pygame.display.update()
+            gameOver("Você perdeu!",-1)
 
-
-    novamente = ""
-    run = True
-    text = font.render("Outra cartas (S/N)?", True, (255, 255, 255))
-    screen.blit(text, [200, 550])
     font = pygame.font.SysFont(None, 18)
+    text = font.render("Outra carta (S/N)?", True, (255, 255, 255)) # Apaga mensagem
+    screen.blit(text, [200, 550])
     text = font.render("Jogar novamente (S/N)?", True, (0, 0, 0))
     screen.blit(text, [200, 550])
     pygame.display.update()
+    novamente = ""
+    run = True
     while run:
         pygame.time.delay(100)
 

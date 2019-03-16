@@ -29,8 +29,5 @@ class Jogador(object):
     def getDinheiro(self):
         return self.dinheiro
 
-    def adicionaDinheiro(self, valor):
+    def resultado(self, valor):
         self.dinheiro += valor
-
-    def subtraiDinheiro(self, valor):
-        self.dinheiro -= valor
