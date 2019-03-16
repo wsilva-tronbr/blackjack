@@ -17,6 +17,8 @@ def tela(jogador):
     font = pygame.font.SysFont(None, 18)
     text = font.render("Pontos: "+str(jogador.getPontos()), True, (0, 0, 0))
     screen.blit(text, [5, 550])
+    text = font.render("Outra cartas (S/N)?", True, (0, 0, 0))
+    screen.blit(text, [200, 550])
     pygame.display.update()
 
 def pegaCartas(jogador, quantidade):
@@ -45,29 +47,30 @@ while True:
             if event.type == pygame.QUIT:
                 run = False
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_s]:
-            pegaCartas(jogador, 1)
-            tela(jogador)
+        if event.type == pygame.KEYDOWN:
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_s]:
+                pegaCartas(jogador, 1)
+                tela(jogador)
 
-            if jogador.getPontos() == 21:
-                font = pygame.font.SysFont(None, 18)
-                text = font.render("BLACK JACK!!!", True, (0, 0, 0))
-                screen.blit(text, [200, 500])
-                pygame.display.update()
-                jogador.adicionaDinheiro(aposta)
-                status = "ganhou"
+                if jogador.getPontos() == 21:
+                    font = pygame.font.SysFont(None, 18)
+                    text = font.render("BLACK JACK!!!", True, (0, 0, 0))
+                    screen.blit(text, [200, 500])
+                    pygame.display.update()
+                    jogador.adicionaDinheiro(aposta)
+                    status = "ganhou"
+                    run = False
+                elif jogador.getPontos() > 21:
+                    font = pygame.font.SysFont(None, 18)
+                    text = font.render("ESTOUROU!!!", True, (0, 0, 0))
+                    screen.blit(text, [200, 500])
+                    pygame.display.update()
+                    jogador.subtraiDinheiro(aposta)
+                    status = "perdeu"
+                    run = False
+            elif keys[pygame.K_n]:
                 run = False
-            elif jogador.getPontos() > 21:
-                font = pygame.font.SysFont(None, 18)
-                text = font.render("ESTOUROU!!!", True, (0, 0, 0))
-                screen.blit(text, [200, 500])
-                pygame.display.update()
-                jogador.subtraiDinheiro(aposta)
-                status = "perdeu"
-                run = False
-        elif keys[pygame.K_n]:
-            run = False
 
     # Joga banca
     if status != "ganhou" and status != "perdeu":
@@ -93,24 +96,27 @@ while True:
 
     novamente = ""
     run = True
+    text = font.render("Outra cartas (S/N)?", True, (255, 255, 255))
+    screen.blit(text, [200, 550])
+    font = pygame.font.SysFont(None, 18)
+    text = font.render("Jogar novamente (S/N)?", True, (0, 0, 0))
+    screen.blit(text, [200, 550])
+    pygame.display.update()
     while run:
         pygame.time.delay(100)
-        font = pygame.font.SysFont(None, 18)
-        text = font.render("Jogar novamente (S/N)?", True, (0, 0, 0))
-        screen.blit(text, [200, 550])
-        pygame.display.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_s]:
-            novamente = "S"
-            run = False
-        if keys[pygame.K_n]:
-            novamente = "N"
-            run = False
+            if event.type == pygame.KEYDOWN:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_s]:
+                    novamente = "S"
+                    run = False
+                if keys[pygame.K_n]:
+                    novamente = "N"
+                    run = False
 
     if novamente.upper() != "S":
         break
